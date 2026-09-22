@@ -12,5 +12,12 @@
     "start_date": "2026-08-20",
     "budget": 28000,
     "min_participants": 4
+  },
+  {
+    "id": 3,
+    "name": "",
+    "start_date": "2026-07-15",
+    "budget": 234.0,
+    "min_participants": 342
   }
 ]

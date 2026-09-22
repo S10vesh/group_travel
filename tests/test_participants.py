@@ -1,21 +1,27 @@
-from datetime import date
-from trips import add_trip
-from participants import add_participant, can_start_planning
+from models import Trip, Participant
+from models.participants import (
+    add_participant, count_participants,
+)
+
+
+def test_participant_links_to_trip():
+    trip = Trip(1, "Крым", "2026-07-15", 40000, 3)
+    p = Participant(1, "Иван", trip)
+    assert p.trip is trip
+    assert p.trip.name == "Крым"
 
 
 def test_add_participant():
+    trip = Trip(1, "Крым", "2026-07-15", 40000, 3)
     participants = []
-    p = add_participant(participants, "Иван", 1)
+    p = add_participant(participants, "Иван", trip)
     assert len(participants) == 1
-    assert p["name"] == "Иван"
+    assert p.name == "Иван"
 
 
-def test_can_start_planning():
-    trips = []
-    trip = add_trip(trips, "Крым", date(2026, 7, 15), 40000, 3)
+def test_count_participants():
+    trip = Trip(1, "Крым", "2026-07-15", 40000, 3)
     participants = []
-    add_participant(participants, "Иван", trip["id"])
-    add_participant(participants, "Мария", trip["id"])
-    assert not can_start_planning(trip, participants)
-    add_participant(participants, "Алексей", trip["id"])
-    assert can_start_planning(trip, participants)
+    add_participant(participants, "Иван", trip)
+    add_participant(participants, "Мария", trip)
+    assert count_participants(participants, trip) == 2
