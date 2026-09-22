@@ -1,116 +1,128 @@
 """
 Система планирования путешествия группой.
-Начальный сценарий ПР1.
+Точка входа и консольное меню (ПР2).
 """
 
-from datetime import datetime
+from storage import load_json, save_json
+from trips import (
+    add_trip,
+    find_trip_by_name,
+    get_trip_by_id,
+    sort_trips_by_budget,
+)
+from participants import (
+    add_participant,
+    count_participants,
+    can_start_planning,
+)
+from utils import input_int, input_float, input_date
 
 
-def get_trip_name() -> str:
-    """Запрашивает название путешествия."""
-    name = input("Введите название путешествия: ").strip()
-    if not name:
-        print("Название не может быть пустым. Установлено значение по умолчанию.")
-        return "Групповое путешествие"
-    return name
+def show_trips(trips: list) -> None:
+    """Вывести список путешествий."""
+    if not trips:
+        print("Путешествий пока нет.")
+        return
+    print("\n--- Список путешествий ---")
+    for t in trips:
+        print(
+            f"ID: {t['id']} | {t['name']} | "
+            f"Дата: {t['start_date']} | "
+            f"Бюджет: {t['budget']} руб. | "
+            f"Мин. участников: {t['min_participants']}"
+        )
 
 
-def get_participants_count() -> int:
-    """Запрашивает и проверяет количество участников."""
-    raw = input("Введите количество участников: ").strip()
-    try:
-        count = int(raw)
-        if count < 1:
-            print("Количество участников должно быть больше 0. Установлено 1.")
-            return 1
-        return count
-    except ValueError:
-        print("Ошибка ввода. Установлено значение 1.")
-        return 1
-
-
-def get_budget() -> float:
-    """Запрашивает и проверяет бюджет."""
-    raw = input("Введите общий бюджет (руб.): ").strip()
-    try:
-        budget = float(raw.replace(",", "."))
-        if budget < 0:
-            print("Бюджет не может быть отрицательным. Установлено 0.")
-            return 0.0
-        return budget
-    except ValueError:
-        print("Ошибка ввода. Установлено значение 0.")
-        return 0.0
-
-
-def get_start_date() -> str:
-    """Запрашивает дату начала в формате ГГГГ-ММ-ДД."""
-    raw = input("Введите дату начала (ГГГГ-ММ-ДД): ").strip()
-    try:
-        datetime.strptime(raw, "%Y-%m-%d")
-        return raw
-    except ValueError:
-        print("Некорректный формат даты. Установлена сегодняшняя дата.")
-        return datetime.now().strftime("%Y-%m-%d")
-
-
-def check_participants(count: int) -> bool:
-    """Проверяет, достаточно ли участников (минимум 3)."""
-    return count >= 3
-
-
-def check_budget(budget: float) -> bool:
-    """Проверяет, достаточен ли бюджет (минимум 15000 руб.)."""
-    return budget >= 15000.0
-
-
-def check_date(date_str: str) -> bool:
-    """Проверяет, что дата начала не в прошлом."""
-    trip_date = datetime.strptime(date_str, "%Y-%m-%d").date()
-    today = datetime.now().date()
-    return trip_date >= today
+def show_participants(participants: list, trips: list) -> None:
+    """Вывести список участников."""
+    if not participants:
+        print("Участников пока нет.")
+        return
+    print("\n--- Список участников ---")
+    for p in participants:
+        trip = get_trip_by_id(trips, p["trip_id"])
+        trip_name = trip["name"] if trip else "—"
+        print(f"ID: {p['id']} | {p['name']} | Путешествие: {trip_name}")
 
 
 def main() -> None:
-    print("=== Система планирования путешествия группой ===\n")
+    trips = load_json("trips.json")
+    participants = load_json("participants.json")
 
-    trip_name = get_trip_name()
-    participants = get_participants_count()
-    budget = get_budget()
-    start_date = get_start_date()
+    while True:
+        print("\n=== Система планирования путешествия группой ===")
+        print("1. Показать путешествия")
+        print("2. Добавить путешествие")
+        print("3. Найти путешествие по названию")
+        print("4. Показать участников")
+        print("5. Добавить участника")
+        print("6. Проверить готовность путешествия")
+        print("7. Сортировать путешествия по бюджету")
+        print("0. Выход")
 
-    print("\n--- Введённые данные ---")
-    print(f"Название: {trip_name}")
-    print(f"Участников: {participants}")
-    print(f"Бюджет: {budget} руб.")
-    print(f"Дата начала: {start_date}")
+        choice = input("\nВыберите действие: ").strip()
 
-    print("\n--- Результаты проверки ---")
+        if choice == "1":
+            show_trips(trips)
 
-    participants_ok = check_participants(participants)
-    budget_ok = check_budget(budget)
-    date_ok = check_date(start_date)
+        elif choice == "2":
+            name = input("Название путешествия: ").strip()
+            start = input_date("Дата начала (ГГГГ-ММ-ДД): ")
+            budget = input_float("Бюджет (руб.): ")
+            min_p = input_int("Минимальное количество участников: ")
+            trip = add_trip(trips, name, start, budget, min_p)
+            save_json("trips.json", trips)
+            print(f"Путешествие «{trip['name']}» добавлено (ID={trip['id']}).")
 
-    if participants_ok:
-        print("Количество участников: достаточно")
-    else:
-        print("Количество участников: недостаточно (нужно минимум 3)")
+        elif choice == "3":
+            query = input("Введите часть названия: ").strip()
+            found = find_trip_by_name(trips, query)
+            show_trips(found)
 
-    if budget_ok:
-        print("Бюджет: достаточен")
-    else:
-        print("Бюджет: недостаточен (нужно минимум 15 000 руб.)")
+        elif choice == "4":
+            show_participants(participants, trips)
 
-    if date_ok:
-        print("Дата начала: корректна")
-    else:
-        print("Дата начала: в прошлом")
+        elif choice == "5":
+            show_trips(trips)
+            trip_id = input_int("ID путешествия: ")
+            trip = get_trip_by_id(trips, trip_id)
+            if not trip:
+                print("Путешествие с таким ID не найдено.")
+                continue
+            name = input("Имя участника: ").strip()
+            p = add_participant(participants, name, trip_id)
+            save_json("participants.json", participants)
+            print(f"Участник «{p['name']}» добавлен.")
 
-    print("\n--- Итоговый статус ---")
-    if participants_ok and budget_ok and date_ok:
-        print(f"Путешествие «{trip_name}» можно планировать!")
-    else:
-        print(f"Путешествие «{trip_name}» пока нельзя планировать. Исправьте условия.")
+        elif choice == "6":
+            show_trips(trips)
+            trip_id = input_int("ID путешествия: ")
+            trip = get_trip_by_id(trips, trip_id)
+            if not trip:
+                print("Путешествие не найдено.")
+                continue
+            current = count_participants(participants, trip_id)
+            ready = can_start_planning(trip, participants)
+            print(f"\nПутешествие: {trip['name']}")
+            print(f"Участников сейчас: {current}")
+            print(f"Нужно минимум: {trip['min_participants']}")
+            if ready:
+                print("Статус: можно начинать планирование!")
+            else:
+                print("Статус: ещё недостаточно участников.")
+
+        elif choice == "7":
+            sorted_trips = sort_trips_by_budget(trips)
+            show_trips(sorted_trips)
+
+        elif choice == "0":
+            save_json("trips.json", trips)
+            save_json("participants.json", participants)
+            print("Данные сохранены. Выход.")
+            break
+
+        else:
+            print("Неверный пункт меню.")
 
 
 if __name__ == "__main__":

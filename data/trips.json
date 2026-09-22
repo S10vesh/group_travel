@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "name": "Крым 2026",
+    "start_date": "2026-07-15",
+    "budget": 45000,
+    "min_participants": 3
+  },
+  {
+    "id": 2,
+    "name": "Сочи выходные",
+    "start_date": "2026-08-20",
+    "budget": 28000,
+    "min_participants": 4
+  }
+]
