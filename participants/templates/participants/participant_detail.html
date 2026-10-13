@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}{{ participant.name|default:"Без имени" }}{% endblock %}
+{% block content %}
+<a href="{% url 'participants:list' %}">← Все участники</a>
+<h1>{{ participant.name|default:"Без имени" }}</h1>
+<article class="travel-card">
+  <p>Участник № {{ participant.id }}</p>
+  <h2>Путешествие участника</h2>
+  <p><a href="{% url 'trips:detail' participant.trip.id %}">{{ participant.trip.name|default:"Без названия" }}</a></p>
+  <p>Дата начала: {{ participant.trip.start_date }}</p>
+  <p>Бюджет поездки: {{ participant.trip.budget|floatformat:2 }} ₽</p>
+</article>
+{% endblock %}

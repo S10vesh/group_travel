@@ -1,6 +1,10 @@
 """Модель путешествия и функции работы с коллекцией путешествий."""
 
 from datetime import date
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from .groups import TravelGroup
 
 
 class Trip:
@@ -20,6 +24,9 @@ class Trip:
         self.start_date = start_date
         self.budget = budget
         self.min_participants = min_participants
+        # Обратная связь: к какому TravelGroup относится путешествие.
+        # Устанавливается в TravelGroup.__init__.
+        self.group: "TravelGroup | None" = None
 
     def is_budget_enough(self, min_budget: float) -> bool:
         """Проверить, достаточен ли бюджет."""

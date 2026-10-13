@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Путешествия{% endblock %}
+{% block content %}
+<h1>Путешествия</h1>
+<p>Всего: {{ trips|length }}. Выберите поездку, чтобы посмотреть состав группы.</p>
+<div class="cards">
+  {% for trip in trips %}
+    {% include "trips/includes/trip_card.html" with trip=trip only %}
+  {% empty %}
+    <p class="empty-state">Путешествий пока нет. Добавьте первую поездку в консольном приложении.</p>
+  {% endfor %}
+</div>
+{% endblock %}

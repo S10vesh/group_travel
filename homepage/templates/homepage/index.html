@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">ПЛАНЫ, КОТОРЫЕ ОБЪЕДИНЯЮТ</p>
+  <h1>В хорошей компании<br>любой путь интереснее.</h1>
+  <p>Выбирайте путешествие, знакомьтесь с участниками и проверяйте, готова ли группа к планированию.</p>
+  <a class="btn btn-primary" href="{% url 'trips:list' %}">Смотреть путешествия →</a>
+  <a class="btn btn-outline-primary" href="{% url 'participants:list' %}">Участники</a>
+</section>
+<section class="cards" aria-label="Статистика проекта">
+  <article class="travel-card"><h2>{{ trip_count }}</h2><p>Путешествий в планах</p></article>
+  <article class="travel-card"><h2>{{ participant_count }}</h2><p>Записей участников</p></article>
+  <article class="travel-card"><h2>Вместе проще</h2><p>Даты, бюджет и состав группы в одном месте.</p></article>
+</section>
+{% endblock %}

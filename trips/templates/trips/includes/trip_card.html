@@ -1,0 +1,8 @@
+<article class="travel-card">
+  <p class="eyebrow">ПОЕЗДКА № {{ trip.id }}</p>
+  <h2><a href="{% url 'trips:detail' trip.id %}">{{ trip.name|default:"Без названия"|truncatechars:45 }}</a></h2>
+  <p>Дата начала: {{ trip.start_date }}</p>
+  <p class="budget">{{ trip.budget|floatformat:2 }} ₽</p>
+  <p>Минимум участников: {{ trip.min_participants }}</p>
+  <a href="{% url 'trips:detail' trip.id %}">Подробнее →</a>
+</article>

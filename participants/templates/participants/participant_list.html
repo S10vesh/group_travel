@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Участники{% endblock %}
+{% block content %}
+<h1>Участники</h1>
+<p>Всего записей: {{ participants|length }}.</p>
+<div class="cards">
+  {% for participant in participants %}
+    <article class="travel-card">
+      <h2><a href="{% url 'participants:detail' participant.id %}">{{ participant.name|default:"Без имени" }}</a></h2>
+      <p>Путешествие: <a href="{% url 'trips:detail' participant.trip.id %}">{{ participant.trip.name|default:"Без названия" }}</a></p>
+    </article>
+  {% empty %}
+    <p class="empty-state">Участников пока нет. Добавьте их в консольном приложении.</p>
+  {% endfor %}
+</div>
+{% endblock %}

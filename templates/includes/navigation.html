@@ -1,0 +1,14 @@
+{% load static %}
+<header>
+  <nav class="container navigation" aria-label="Основная навигация">
+    <a class="brand" href="{% url 'homepage:index' %}">
+      <img src="{% static 'homepage/img/logo.svg' %}" width="40" height="40" alt="">
+      Group Travel
+    </a>
+    <div class="nav-links">
+      <a href="{% url 'homepage:index' %}" {% if request.resolver_match.namespace == 'homepage' %}aria-current="page"{% endif %}>Главная</a>
+      <a href="{% url 'trips:list' %}" {% if request.resolver_match.namespace == 'trips' %}aria-current="page"{% endif %}>Путешествия</a>
+      <a href="{% url 'participants:list' %}" {% if request.resolver_match.namespace == 'participants' %}aria-current="page"{% endif %}>Участники</a>
+    </div>
+  </nav>
+</header>

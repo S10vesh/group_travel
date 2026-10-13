@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}{{ trip.name|default:"Без названия" }}{% endblock %}
+{% block content %}
+<a href="{% url 'trips:list' %}">← Все путешествия</a>
+<h1>{{ trip.name|default:"Без названия" }}</h1>
+<section class="travel-card">
+  {% include "trips/includes/group_status.html" with group=group only %}
+  <dl>
+    <dt>Дата начала</dt><dd>{% if start_date %}{{ start_date|date:"d.m.Y" }}{% else %}Не указана{% endif %}</dd>
+    <dt>Бюджет</dt><dd>{{ trip.budget|floatformat:2 }} ₽</dd>
+    <dt>Состав группы</dt><dd>{{ group.count }} из {{ trip.min_participants }} необходимых участников</dd>
+  </dl>
+</section>
+<h2>Участники поездки</h2>
+<ul class="people-list">
+  {% for participant in group.participants %}
+    <li><a href="{% url 'participants:detail' participant.id %}">{{ participant.name|default:"Без имени" }}</a></li>
+  {% empty %}
+    <li>В этой поездке пока нет участников.</li>
+  {% endfor %}
+</ul>
+<button class="btn btn-outline-primary" type="button" data-print hidden>Распечатать план поездки</button>
+{% endblock %}

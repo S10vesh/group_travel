@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}{{ error_title|default:"Страница не найдена" }}{% endblock %}
+{% block content %}
+<section class="hero">
+  <p class="eyebrow">ОШИБКА 404</p>
+  <h1>{{ error_title|default:"Кажется, мы сбились с маршрута." }}</h1>
+  <p>Такой страницы или записи нет. Вернитесь к списку путешествий и выберите существующую поездку.</p>
+  <a class="btn btn-primary" href="{% url 'homepage:index' %}">На главную</a>
+</section>
+{% endblock %}

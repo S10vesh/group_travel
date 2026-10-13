@@ -1,0 +1,37 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #f5f7f3; color: #243d36; font-family: system-ui, sans-serif; line-height: 1.6; }
+a { color: #216951; text-underline-offset: 4px; }
+a:hover { color: #123b2e; }
+.container { width: min(1120px, 92%); margin-inline: auto; }
+header { background: #fff; border-bottom: 1px solid #dde6df; }
+.navigation, .brand, .nav-links { display: flex; align-items: center; gap: 24px; }
+.navigation { justify-content: space-between; padding-block: 20px; flex-wrap: wrap; }
+.brand { gap: 10px; font-size: 1.25rem; font-weight: 750; text-decoration: none; }
+.nav-links { flex-wrap: wrap; gap: 18px; }
+.nav-links a { text-decoration: none; padding-block: 8px; }
+.nav-links [aria-current] { border-bottom: 3px solid #216951; font-weight: 700; }
+main { min-height: 72vh; padding-block: 40px; }
+h1 { font-size: clamp(2rem, 5vw, 3.8rem); line-height: 1.15; margin-block: 20px; letter-spacing: -.04em; }
+h2 { font-size: 1.4rem; margin-block: 18px; }
+.hero { padding: clamp(24px, 5vw, 60px); background: #e4eedf; border-radius: 24px; margin-bottom: 30px; }
+.hero p { max-width: 680px; }
+.eyebrow { font-size: .8rem; font-weight: 700; letter-spacing: .1em; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: 20px; }
+.travel-card { background: white; border: 1px solid #dce4dc; border-radius: 18px; padding: 26px; overflow-wrap: anywhere; }
+.budget { font-size: 1.5rem; font-weight: 700; }
+.status { display: inline-block; border-radius: 20px; padding: 6px 14px; font-weight: 600; margin-bottom: 20px; }
+.status-ready { background: #dcefe3; color: #205c39; }
+.status-waiting { background: #fff0d0; color: #755212; }
+dt { font-weight: 700; } dd { margin: 0 0 15px; }
+.btn { display: inline-block; border: 1px solid #216951; border-radius: 8px; padding: 11px 18px; text-decoration: none; margin: 6px 6px 6px 0; cursor: pointer; }
+.btn-primary { background: #216951; color: white; }
+.btn-primary:hover { background: #164b39; color: white; }
+.btn-outline-primary { color: #216951; background: transparent; }
+.people-list { padding-left: 24px; }
+.empty-state { padding: 28px; border: 1px dashed #91a797; border-radius: 12px; }
+footer { padding-block: 28px; color: #51675d; }
+.skip-link { position: absolute; left: 12px; top: -80px; background: white; padding: 12px; }
+.skip-link:focus { top: 8px; }
+:focus-visible { outline: 3px solid #c67720; outline-offset: 4px; }
+[hidden] { display: none !important; }
+@media print { header, footer, button, .skip-link { display: none; } body { background: white; } main { padding: 0; } }
